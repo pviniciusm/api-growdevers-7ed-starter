@@ -1,5 +1,5 @@
 import express from "express";
-import { growdeverRoutes } from "./routes/growdeverRoutes";
+import { growdeverRoutes } from "./routes/growdever.routes";
 
 const app = express();
 app.use(express.json());

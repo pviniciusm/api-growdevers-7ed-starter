@@ -1,41 +1,27 @@
 import { Router } from "express";
+import { GrowdeverController } from "../controllers/growdever.controller";
 import { growdeversList } from "../data/growdeversList";
 import { Growdever } from "../models/growdever";
 
 const growdeverRoutes = Router();
 
-// GET http://localhost:3000/growdever
-// Listar todos os growdevers
-growdeverRoutes.get("/all", (req, res) => {
-    return res.send({
-        ok: true,
-        message: "Growdevers successfully listed",
-        data: growdeversList,
-    });
-});
-
-// GET http://localhost:3000/growdever (com query nome e idade)
+// GET http://localhost:3000/growdever/ (com query nome e idade)
 // Listar todos os growdevers filtrando por nome e idade
 growdeverRoutes.get("/", (req, res) => {
     try {
         const { nome, idade } = req.query;
 
-        let lista = growdeversList;
+        const controller = new GrowdeverController();
 
-        if (nome) {
-            lista = growdeversList.filter((item) => {
-                return item._nome === nome;
-            });
-        }
+        const result = controller.list(
+            nome as string,
+            idade ? Number(idade) : undefined
+        );
 
-        if (idade) {
-            lista = lista.filter((item) => item._idade == Number(idade));
-        }
-
-        return res.send({
+        return res.status(200).send({
             ok: true,
             message: "Growdevers successfully listed",
-            data: lista,
+            data: result,
         });
     } catch (error: any) {
         return res.status(500).send({
@@ -51,7 +37,7 @@ growdeverRoutes.get("/", (req, res) => {
 growdeverRoutes.get("/:id", (req, res) => {
     const { id } = req.params;
 
-    let growdever = growdeversList.find((item) => item._id === id);
+    let growdever = growdeversList.find((item) => item.id === id);
 
     if (!growdever) {
         return res.status(404).send({
@@ -108,7 +94,7 @@ growdeverRoutes.post("/", (req, res) => {
 growdeverRoutes.delete("/:id", (req, res) => {
     const { id } = req.params;
 
-    let growdeverIndex = growdeversList.findIndex((item) => item._id === id);
+    let growdeverIndex = growdeversList.findIndex((item) => item.id === id);
 
     if (growdeverIndex < 0) {
         return res.status(404).send({
@@ -125,5 +111,82 @@ growdeverRoutes.delete("/:id", (req, res) => {
         data: growdeversList,
     });
 });
+
+// PUT http://localhost:3000/growdever/id-123
+// id => route param
+// dados alteracao => body
+growdeverRoutes.put("/:id", (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nome, idade } = req.body;
+
+        const controller = new GrowdeverController();
+        const result = controller.update(id, nome, idade);
+
+        if (!result) {
+            return res.status(404).send({
+                ok: false,
+                message: "Cliente não existe",
+            });
+        }
+
+        return res.status(200).send({
+            ok: true,
+            message: "Growdever atualizado com sucesso",
+            data: result,
+        });
+    } catch (error: any) {
+        return res.status(500).send({
+            ok: false,
+            message: "Instabilidade no servidor",
+            error: error.toString(),
+        });
+    }
+});
+
+// GET http://localhost:3000/growdever/id-123/skills
+growdeverRoutes.get("/:id/skills", (req, res) => {
+    const { id } = req.params;
+
+    const growdever = growdeversList.find((item) => item.id == id);
+    if (!growdever) {
+        return res.status(404).send({ ok: false });
+    }
+
+    return res.status(200).send({
+        ok: true,
+        data: growdever.skills,
+    });
+});
+
+// HTTP
+
+// API REST
+
+// GET    - listar e obter dados
+// POST   - criar novos dados
+// PUT    - alterar dados já existentes
+// DELETE - excluir um dado
+
+// RESTful
+
+// Status Code HTTP
+
+// 200: OK
+// 201: OK criado algo
+
+// 400: requisição mal feita
+// 404: recurso não encontrado
+// 418: i'm a teapot
+
+// 500: erro interno de servidor
+// 501: não autorizado
+// 503: não permitido
+
+// Nomes dos recursos
+
+// http://localhost:3000/usuario       -  /usuario
+// http://localhost:3000/usuario/123   -  /usuario/123
+// http://localhost:3000/produto
 
 export { growdeverRoutes };
