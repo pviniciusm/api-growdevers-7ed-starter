@@ -1,4 +1,5 @@
-import { growdeversList } from "../data/growdeversList";
+import { growdeversList } from './../data/growdeversList';
+import { Request, Response } from "express";
 
 export class GrowdeverController {
     public list(nome?: string, idade?: number) {
@@ -31,4 +32,16 @@ export class GrowdeverController {
 
         return growdeversList;
     }
+
+    public createSkill (req: Request, res: Response) {
+        const { skill } = req.body;
+        const { id } = req.params;
+        const growdever = growdeversList.find(growdever => growdever.id === id);
+        
+        if (!growdever) return res.status(404).json({ message: "Growdever não encontrado!" });
+
+
+
+    }
+
 }

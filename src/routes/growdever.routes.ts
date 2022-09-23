@@ -159,6 +159,12 @@ growdeverRoutes.get("/:id/skills", (req, res) => {
     });
 });
 
+growdeverRoutes.post('/create-skill/:id', (req, res) => {
+    res.json({
+        OK: true
+    })
+});
+
 // HTTP
 
 // API REST
