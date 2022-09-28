@@ -5,11 +5,16 @@ export class Growdever {
 
     constructor(
         private _nome: string,
+        private _cpf: number,
         private _idade: number,
         private _skills?: string[]
     ) {
         this._id = createUuid();
         this._skills = this._skills ?? [];
+    }
+
+    public get cpf() {
+        return this._cpf;
     }
 
     public get nome() {
@@ -41,6 +46,7 @@ export class Growdever {
         return {
             nome: this._nome,
             idade: this._idade,
+            cpf: this._cpf,
             id: this._id,
             skills: this._skills,
         };
