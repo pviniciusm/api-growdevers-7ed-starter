@@ -1,23 +1,16 @@
 import express from "express";
+import cors from "cors";
+import * as dotenv from "dotenv";
 import { growdeverRoutes } from "./routes/growdever.routes";
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
-
-// GET http://localhost:3000/teste
-app.get("/teste", (req, res) => {
-    // req => dados da requisição
-    // res => controle da resposta
-    console.log("Entrou na rota /teste");
-
-    res.send({
-        ok: true,
-        message: "teste ok",
-    });
-});
+app.use(cors());
 
 app.use("/growdever", growdeverRoutes);
 
-app.listen(3000, () => {
-    console.log("API rodando...");
+app.listen(process.env.PORT, () => {
+    console.log("API rodando na porta " + process.env.PORT);
 });
