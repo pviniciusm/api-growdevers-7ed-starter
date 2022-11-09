@@ -1,30 +1,27 @@
 import { growdeversList } from "./../data/growdeversList";
 import { Request, Response } from "express";
 import { Growdever } from "../models/growdever";
+import { dbConnection } from "../database/pg.database";
 
 export class GrowdeverController {
-    public list(req: Request, res: Response) {
+    public async list(req: Request, res: Response) {
         try {
             const { nome, idade } = req.query;
 
-            let lista = growdeversList;
+            let where = "";
 
             if (nome) {
-                lista = growdeversList.filter((item) => item.nome === nome);
+                where = `WHERE nome LIKE '%${nome}%'`;
             }
 
-            if (idade) {
-                lista = lista.filter((item) => item.idade == Number(idade));
-            }
-
-            let listaRetorno = lista.map((growdever) => {
-                return growdever.getGrowdever();
-            });
+            const result = await dbConnection.query(
+                "SELECT * FROM public.growdever " + where
+            );
 
             return res.status(200).send({
                 ok: true,
                 message: "Growdevers successfully listed",
-                data: listaRetorno,
+                data: result.rows,
             });
         } catch (error: any) {
             return res.status(500).send({
@@ -60,7 +57,7 @@ export class GrowdeverController {
         }
     }
 
-    public create(req: Request, res: Response) {
+    public async create(req: Request, res: Response) {
         try {
             const { nome, cpf, idade, skills } = req.body;
 
@@ -86,12 +83,19 @@ export class GrowdeverController {
             }
 
             const growdever = new Growdever(nome, cpf, idade, skills);
-            growdeversList.push(growdever);
+
+            const query = `INSERT INTO public.growdever (id, nome, cpf, idade, skills) values ('${
+                growdever.id
+            }', '${growdever.nome}', ${growdever.cpf}, ${
+                growdever.idade
+            }, '${growdever.skills.join(",")}')`;
+
+            const result = await dbConnection.query(query);
 
             return res.status(201).send({
                 ok: true,
                 message: "Growdever successfully created",
-                data: growdeversList,
+                data: result,
             });
         } catch (error: any) {
             return res.status(500).send({

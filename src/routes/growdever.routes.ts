@@ -10,15 +10,12 @@ const growdeverRoutes = Router();
 
 growdeverRoutes.get("/", [logGetMiddleware], new GrowdeverController().list);
 growdeverRoutes.get("/:id", new GrowdeverController().get);
-
 growdeverRoutes.post(
     "/",
     [cpfExistsMiddleware],
     new GrowdeverController().create
 );
-
 growdeverRoutes.delete("/:id", new GrowdeverController().delete);
-
 growdeverRoutes.put("/:id", new GrowdeverController().update);
 
 growdeverRoutes.use("/:id/skills", skillsRoutes);

@@ -3,6 +3,9 @@ import { v4 as createUuid } from "uuid";
 export class Growdever {
     private _id: string;
 
+    // skills no BD: string separado por vírgula
+    // javascript,typescript,java
+
     constructor(
         private _nome: string,
         private _cpf: number,
