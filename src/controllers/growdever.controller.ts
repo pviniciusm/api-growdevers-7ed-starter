@@ -5,6 +5,8 @@ import { dbConnection } from "../database/pg.database";
 
 export class GrowdeverController {
     public async list(req: Request, res: Response) {
+        console.log("hello world!");
+
         try {
             const { nome, idade } = req.query;
 
@@ -31,18 +33,30 @@ export class GrowdeverController {
         }
     }
 
-    public get(req: Request, res: Response) {
+    public async get(req: Request, res: Response) {
         try {
             const { id } = req.params;
 
-            let growdever = growdeversList.find((item) => item.id === id);
+            const query = await dbConnection.query(
+                `select * from public.growdever where id = '${id}'`
+            );
 
-            if (!growdever) {
+            if (query.rowCount <= 0) {
                 return res.status(404).send({
                     ok: false,
-                    message: "Growdever not found",
+                    message: "deu ruim!",
                 });
             }
+
+            const row = query.rows[0];
+
+            const growdever = Growdever.create(
+                row.nome,
+                row.idade,
+                row.cpf,
+                row.id,
+                row.skills.toString().split(",")
+            );
 
             return res.status(200).send({
                 ok: true,
@@ -105,27 +119,42 @@ export class GrowdeverController {
         }
     }
 
-    public update(req: Request, res: Response) {
+    public async update(req: Request, res: Response) {
         try {
             const { id } = req.params;
             const { nome, idade } = req.body;
 
-            const growdever = growdeversList.find((item) => item.id === id);
+            const query = await dbConnection.query(
+                `select * from public.growdever where id = '${id}'`
+            );
 
-            if (!growdever) {
+            if (query.rowCount <= 0) {
                 return res.status(404).send({
                     ok: false,
-                    message: "Growdever não existe",
+                    message: "Ng aruá!",
                 });
             }
 
-            growdever.nome = nome;
-            growdever.idade = idade;
+            const resutl = await dbConnection.query(
+                `update public.growdever set nome = '${nome}', idade = ${idade} where id = '${id}'`
+            );
+
+            //const growdever = growdeversList.find((item) => item.id === id);
+
+            // if (!growdever) {
+            //     return res.status(404).send({
+            //         ok: false,
+            //         message: "Growdever não existe",
+            //     });
+            // }
+
+            // growdever.nome = nome;
+            // growdever.idade = idade;
 
             return res.status(200).send({
                 ok: true,
                 message: "Growdever atualizado com sucesso",
-                data: growdeversList,
+                data: resutl,
             });
         } catch (error: any) {
             return res.status(500).send({
@@ -135,27 +164,38 @@ export class GrowdeverController {
         }
     }
 
-    public delete(req: Request, res: Response) {
+    public async delete(req: Request, res: Response) {
         try {
             const { id } = req.params;
 
-            let growdeverIndex = growdeversList.findIndex(
-                (item) => item.id === id
-            );
+            const query = `SELECT * FROM public.growdever WHERE id = '${id}'`;
 
-            if (growdeverIndex < 0) {
-                return res.status(404).send({
-                    ok: false,
-                    message: "Growdever not found",
-                });
+            const result = await dbConnection.query(query);
+
+            if (result.rowCount <= 0) {
+                return res.status(404).send("deu errado! :(");
             }
 
-            growdeversList.splice(growdeverIndex, 1);
+            await dbConnection.query(
+                `DELETE FROM public.growdever WHERE id = '${id}'`
+            );
+
+            // let growdeverIndex = growdeversList.findIndex(
+            //     (item) => item.id === id
+            // );
+
+            // if (growdeverIndex < 0) {
+            //     return res.status(404).send({
+            //         ok: false,
+            //         message: "Growdever not found",
+            //     });
+            // }
+
+            // growdeversList.splice(growdeverIndex, 1);
 
             return res.status(200).send({
                 ok: true,
                 message: "Growdever successfully deleted",
-                data: growdeversList,
             });
         } catch (error: any) {
             return res.status(500).send({

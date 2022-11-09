@@ -3,9 +3,6 @@ import { v4 as createUuid } from "uuid";
 export class Growdever {
     private _id: string;
 
-    // skills no BD: string separado por vírgula
-    // javascript,typescript,java
-
     constructor(
         private _nome: string,
         private _cpf: number,
@@ -53,5 +50,18 @@ export class Growdever {
             id: this._id,
             skills: this._skills,
         };
+    }
+
+    public static create(
+        nome: string,
+        idade: number,
+        cpf: number,
+        id: string,
+        skills?: []
+    ) {
+        const growdever = new Growdever(nome, cpf, idade, skills);
+        growdever._id = id;
+
+        return growdever;
     }
 }
