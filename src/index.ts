@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import { growdeverRoutes } from "./routes/growdever.routes";
+import "reflect-metadata";
+import { DatabaseConnection } from "./database/typeorm/connection";
 
 dotenv.config();
 
@@ -11,6 +13,10 @@ app.use(cors());
 
 app.use("/growdever", growdeverRoutes);
 
-app.listen(process.env.PORT, () => {
-    console.log("API rodando na porta " + process.env.PORT);
+DatabaseConnection.connect().then(() => {
+    console.log("Database foi inicializada.");
+
+    app.listen(process.env.PORT, () => {
+        console.log("API rodando na porta " + process.env.PORT);
+    });
 });

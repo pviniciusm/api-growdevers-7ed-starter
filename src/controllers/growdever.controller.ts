@@ -2,6 +2,7 @@ import { growdeversList } from "./../data/growdeversList";
 import { Request, Response } from "express";
 import { Growdever } from "../models/growdever";
 import { dbConnection } from "../database/pg.database";
+import { DatabaseConnection } from "../database/typeorm/connection";
 
 export class GrowdeverController {
     public async list(req: Request, res: Response) {
@@ -16,14 +17,14 @@ export class GrowdeverController {
                 where = `WHERE nome LIKE '%${nome}%'`;
             }
 
-            const result = await dbConnection.query(
+            const result = await DatabaseConnection.connection.query(
                 "SELECT * FROM public.growdever " + where
             );
 
             return res.status(200).send({
                 ok: true,
                 message: "Growdevers successfully listed",
-                data: result.rows,
+                data: result,
             });
         } catch (error: any) {
             return res.status(500).send({
@@ -104,7 +105,7 @@ export class GrowdeverController {
                 growdever.idade
             }, '${growdever.skills.join(",")}')`;
 
-            const result = await dbConnection.query(query);
+            const result = await DatabaseConnection.connection.query(query);
 
             return res.status(201).send({
                 ok: true,
