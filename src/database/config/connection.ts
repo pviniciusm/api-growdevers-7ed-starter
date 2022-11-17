@@ -7,14 +7,14 @@ const config = new DataSource({
     ssl: {
         rejectUnauthorized: false,
     },
+    synchronize: false,
+    entities: ["src/database/entities/**/*.ts"],
 });
 
 export class DatabaseConnection {
     private static _connection: DataSource;
 
     public static async connect() {
-        console.log(process.env.DB_URL);
-
         if (!this._connection) {
             this._connection = await config.initialize();
         }

@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { GrowdeverController } from "../controllers/growdever.controller";
+import { SkillsController } from "../controllers/skills.controller";
 
 export const skillsRoutes = Router({
     mergeParams: true,
 });
 
-skillsRoutes.get("/", new GrowdeverController().listSkills);
-skillsRoutes.post("/", new GrowdeverController().createSkill);
-skillsRoutes.delete("/:skill", new GrowdeverController().removeSkill);
+skillsRoutes.get("/", new SkillsController().listSkills);
+skillsRoutes.post("/", new SkillsController().createSkill);
+skillsRoutes.delete("/:skill", new SkillsController().removeSkill);

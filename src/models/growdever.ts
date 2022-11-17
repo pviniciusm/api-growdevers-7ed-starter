@@ -57,7 +57,7 @@ export class Growdever {
         idade: number,
         cpf: number,
         id: string,
-        skills?: []
+        skills?: string[]
     ) {
         const growdever = new Growdever(nome, cpf, idade, skills);
         growdever._id = id;
