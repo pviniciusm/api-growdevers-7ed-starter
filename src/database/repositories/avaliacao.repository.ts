@@ -23,18 +23,11 @@ export class AvaliacaoRepository {
     }
 
     public async create(avaliacao: Avaliacao) {
-        const growdeverRepository = new GrowdeverRepository();
-        const growdever = await growdeverRepository.get(avaliacao.growdever.id);
-
-        if (!growdever) {
-            throw new Error("Growdever não existe");
-        }
-
         const avaliacaoEntity = this._repository.create({
             id: avaliacao.id,
             modulo: avaliacao.modulo,
             nota: avaliacao.nota,
-            growdever,
+            id_growdever: avaliacao.growdever.id,
         });
 
         return await this._repository.save(avaliacaoEntity);

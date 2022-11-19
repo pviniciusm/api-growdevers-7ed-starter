@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryColumn,
+} from "typeorm";
 import { GrowdeverEntity } from "./growdever.entity";
 
 @Entity({
@@ -19,4 +26,9 @@ export class AvaliacaoEntity {
         name: "id_growdever",
     })
     growdever!: GrowdeverEntity;
+
+    @Column({
+        name: "id_growdever",
+    })
+    id_growdever!: string;
 }

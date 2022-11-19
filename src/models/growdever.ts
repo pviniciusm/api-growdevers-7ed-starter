@@ -1,3 +1,4 @@
+import { Endereco } from "./endereco.model";
 import { v4 as createUuid } from "uuid";
 
 export class Growdever {
@@ -7,7 +8,8 @@ export class Growdever {
         private _nome: string,
         private _cpf: number,
         private _idade: number,
-        private _skills?: string[]
+        private _skills?: string[],
+        private _endereco?: Endereco
     ) {
         this._id = createUuid();
         this._skills = this._skills ?? [];
@@ -41,6 +43,10 @@ export class Growdever {
         return this._skills ?? [];
     }
 
+    public get endereco() {
+        return this._endereco;
+    }
+
     // Adapter
     public getGrowdever() {
         return {
@@ -57,9 +63,10 @@ export class Growdever {
         idade: number,
         cpf: number,
         id: string,
-        skills?: string[]
+        skills?: string[],
+        endereco?: Endereco
     ) {
-        const growdever = new Growdever(nome, cpf, idade, skills);
+        const growdever = new Growdever(nome, cpf, idade, skills, endereco);
         growdever._id = id;
 
         return growdever;

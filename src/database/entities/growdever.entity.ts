@@ -1,13 +1,18 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import {
+    Column,
+    Entity,
+    OneToMany,
+    PrimaryColumn,
+    OneToOne,
+    JoinColumn,
+} from "typeorm";
 import { AvaliacaoEntity } from "./avaliacao.entity";
+import { EnderecoEntity } from "./endereco.entity";
 
 @Entity({
     name: "growdever",
 })
 export class GrowdeverEntity {
-    // @Column({
-    //     primary: true
-    // })
     @PrimaryColumn()
     id!: string;
 
@@ -29,4 +34,13 @@ export class GrowdeverEntity {
 
     @OneToMany(() => AvaliacaoEntity, (avaliacao) => avaliacao.growdever)
     avaliacoes!: AvaliacaoEntity[];
+
+    @OneToOne(() => EnderecoEntity, {
+        eager: true,
+    })
+    @JoinColumn({ name: "id_endereco" })
+    endereco!: EnderecoEntity;
+
+    @Column({ name: "id_endereco" })
+    id_endereco!: number;
 }

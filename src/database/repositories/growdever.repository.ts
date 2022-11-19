@@ -1,3 +1,5 @@
+import { Endereco } from "./../../models/endereco.model";
+import { EnderecoRepository } from "./endereco.repository";
 import { Growdever } from "../../models/growdever";
 import { DatabaseConnection } from "../config/connection";
 import { GrowdeverEntity } from "../entities/growdever.entity";
@@ -26,6 +28,7 @@ export class GrowdeverRepository {
     }
 
     public async create(growdever: Growdever) {
+        // Criar o endereço
         const growdeverEntity = this._repository.create({
             id: growdever.id,
             cpf: growdever.cpf,
@@ -33,6 +36,13 @@ export class GrowdeverRepository {
             nome: growdever.nome,
             skills: growdever.skills.join(","),
         });
+
+        if (growdever.endereco) {
+            const enderecoRepository = new EnderecoRepository();
+            const result = await enderecoRepository.create(growdever.endereco);
+
+            growdeverEntity.id_endereco = result.id;
+        }
 
         return await this._repository.save(growdeverEntity);
     }

@@ -1,3 +1,4 @@
+import { Endereco } from "./../models/endereco.model";
 import { growdeversList } from "./../data/growdeversList";
 import { Request, Response } from "express";
 import { Growdever } from "../models/growdever";
@@ -49,7 +50,7 @@ export class GrowdeverController {
             return res.status(200).send({
                 ok: true,
                 message: "Growdever successfully obtained",
-                data: growdever,
+                data: result,
             });
         } catch (error: any) {
             return res.status(500).send({
@@ -61,7 +62,7 @@ export class GrowdeverController {
 
     public async create(req: Request, res: Response) {
         try {
-            const { nome, cpf, idade, skills } = req.body;
+            const { nome, cpf, idade, skills, endereco } = req.body;
 
             if (!nome) {
                 return res.status(400).send({
@@ -84,7 +85,39 @@ export class GrowdeverController {
                 });
             }
 
-            const growdever = new Growdever(nome, cpf, idade, skills);
+            let endModel: Endereco | undefined = undefined;
+
+            if (endereco) {
+                if (!endereco.rua) {
+                    return res.status(400).send({
+                        ok: false,
+                        message: "endereco.rua not provided",
+                    });
+                }
+
+                if (!endereco.cidade) {
+                    return res.status(400).send({
+                        ok: false,
+                        message: "endereco.cidade not provided",
+                    });
+                }
+
+                if (!endereco.uf) {
+                    return res.status(400).send({
+                        ok: false,
+                        message: "endereco.uf not provided",
+                    });
+                }
+
+                endModel = new Endereco(
+                    endereco.rua,
+                    endereco.cidade,
+                    endereco.uf,
+                    endereco.complemento
+                );
+            }
+
+            const growdever = new Growdever(nome, cpf, idade, skills, endModel);
 
             const repository = new GrowdeverRepository();
             const result = await repository.create(growdever);
