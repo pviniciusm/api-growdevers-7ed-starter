@@ -21,6 +21,11 @@ export class AvaliacaoEntity {
     @Column()
     nota!: number;
 
+    @Column({
+        nullable: true,
+    })
+    mentor?: string;
+
     @ManyToOne(() => GrowdeverEntity)
     @JoinColumn({
         name: "id_growdever",

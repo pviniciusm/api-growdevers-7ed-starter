@@ -1,22 +1,13 @@
 import { DataSource } from "typeorm";
 import "dotenv/config";
-
-const config = new DataSource({
-    type: "postgres",
-    url: process.env.DB_URL,
-    ssl: {
-        rejectUnauthorized: false,
-    },
-    synchronize: false,
-    entities: ["src/database/entities/**/*.ts"],
-});
+import typeormConfig from "./config";
 
 export class DatabaseConnection {
     private static _connection: DataSource;
 
     public static async connect() {
         if (!this._connection) {
-            this._connection = await config.initialize();
+            this._connection = await typeormConfig.initialize();
         }
     }
 

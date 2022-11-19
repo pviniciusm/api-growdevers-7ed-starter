@@ -8,7 +8,11 @@
         "start": "node ./build/index.js",
         "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
         "dev:debug": "ts-node-dev --inspect --respawn --transpile-only ./src/index.ts",
-        "postinstall": "tsc"
+        "postinstall": "tsc",
+        "typeorm": "typeorm-ts-node-commonjs",
+        "migration:generate": "npm run typeorm migration:generate -- -d ./src/database/config/config.ts",
+        "migration:run": "npm run typeorm migration:run -- -d src/database/config/config.ts",
+        "migration:create": "npm run typeorm migration:create"
     },
     "keywords": [],
     "author": "",
