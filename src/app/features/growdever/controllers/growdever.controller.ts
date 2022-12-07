@@ -1,3 +1,4 @@
+import { CacheRepository } from "./../../../shared/repositories/cache.repository";
 import { Endereco } from "../../../models/endereco.model";
 import { growdeversList } from "../../../shared/data/growdeversList";
 import { Request, Response } from "express";
@@ -12,8 +13,7 @@ import { CreateGrowdeverUseCase } from "../usecases/create-growdever.usecase";
 export class GrowdeverController {
     public async list(req: Request, res: Response) {
         try {
-            const repository = new GrowdeverRepository();
-            const usecase = new ListGrowdeversUseCase(repository);
+            const usecase = new ListGrowdeversUseCase(new GrowdeverRepository(), new CacheRepository());
 
             const result = await usecase.execute();
             return success(res, result, "Growdevers successfully listed");
@@ -116,9 +116,7 @@ export class GrowdeverController {
                 return res.status(404).send("deu errado! :(");
             }
 
-            await dbConnection.query(
-                `DELETE FROM public.growdever WHERE id = '${id}'`
-            );
+            await dbConnection.query(`DELETE FROM public.growdever WHERE id = '${id}'`);
 
             return res.status(200).send({
                 ok: true,
