@@ -16,4 +16,8 @@ export class CacheRepository {
     public async set(chave: string, data: any) {
         await this.repository.set(chave, JSON.stringify(data));
     }
+
+    public async delete(chave: string) {
+        await this.repository.del(chave);
+    }
 }

@@ -52,8 +52,7 @@ export class GrowdeverController {
         try {
             const { nome, cpf, idade, skills, endereco } = req.body;
 
-            const repository = new GrowdeverRepository();
-            const usecase = new CreateGrowdeverUseCase(repository);
+            const usecase = new CreateGrowdeverUseCase(new GrowdeverRepository(), new CacheRepository());
             const result = await usecase.execute({
                 nome,
                 cpf,
@@ -73,7 +72,7 @@ export class GrowdeverController {
             const { id } = req.params;
             const { nome, idade } = req.body;
 
-            const usecase = new UpdateGrowdeverUseCase(new GrowdeverRepository());
+            const usecase = new UpdateGrowdeverUseCase(new GrowdeverRepository(), new CacheRepository());
 
             const result = await usecase.execute({
                 id,

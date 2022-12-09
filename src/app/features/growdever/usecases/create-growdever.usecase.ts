@@ -1,5 +1,6 @@
 import { Endereco } from "../../../models/endereco.model";
 import { Growdever } from "../../../models/growdever.model";
+import { CacheRepository } from "../../../shared/repositories/cache.repository";
 import { GrowdeverRepository } from "../repositories/growdever.repository";
 
 interface CreateGrowdeverDTO {
@@ -18,7 +19,7 @@ interface CreateEnderecoDTO {
 }
 
 export class CreateGrowdeverUseCase {
-    constructor(private repository: GrowdeverRepository) {}
+    constructor(private repository: GrowdeverRepository, private cacheRepository: CacheRepository) {}
 
     public async execute(data: CreateGrowdeverDTO) {
         let endereco = undefined;
@@ -32,15 +33,11 @@ export class CreateGrowdeverUseCase {
             );
         }
 
-        const growdever = new Growdever(
-            data.nome,
-            data.cpf,
-            data.idade,
-            data.skills,
-            endereco
-        );
+        const growdever = new Growdever(data.nome, data.cpf, data.idade, data.skills, endereco);
 
         const result = await this.repository.create(growdever);
+
+        await this.cacheRepository.delete("growdevers");
 
         return result.toJson();
     }
