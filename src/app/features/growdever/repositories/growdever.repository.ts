@@ -10,8 +10,7 @@ interface UpdateGrowdeverDTO {
 }
 
 export class GrowdeverRepository {
-    private _repository =
-        DatabaseConnection.connection.getRepository(GrowdeverEntity);
+    private _repository = DatabaseConnection.connection.getRepository(GrowdeverEntity);
 
     public async list() {
         const result = await this._repository.find({
@@ -40,20 +39,19 @@ export class GrowdeverRepository {
             );
         }
 
-        return Growdever.create(
-            item.nome,
-            item.idade,
-            item.cpf,
-            item.id,
-            item.skills?.split(","),
-            endereco
-        );
+        return Growdever.create(item.nome, item.idade, item.cpf, item.id, item.skills?.split(","), endereco);
     }
 
     public async get(id: string) {
-        return await this._repository.findOneBy({
+        const result = await this._repository.findOneBy({
             id,
         });
+
+        if (!result) {
+            return null;
+        }
+
+        return this.mapEntityToModel(result);
     }
 
     public async create(growdever: Growdever) {
@@ -78,19 +76,18 @@ export class GrowdeverRepository {
         return this.mapEntityToModel(result);
     }
 
-    public async update(
-        growdeverEntity: GrowdeverEntity,
-        data: UpdateGrowdeverDTO
-    ) {
-        if (data.idade) {
-            growdeverEntity.idade = data.idade;
-        }
+    public async update(growdever: Growdever) {
+        const result = await this._repository.update(
+            {
+                id: growdever.id,
+            },
+            {
+                nome: growdever.nome,
+                idade: growdever.idade,
+            }
+        );
 
-        if (data.nome) {
-            growdeverEntity.nome = data.nome;
-        }
-
-        return await this._repository.save(growdeverEntity);
+        return result.affected ?? 0;
     }
 
     // public async listQuery() {

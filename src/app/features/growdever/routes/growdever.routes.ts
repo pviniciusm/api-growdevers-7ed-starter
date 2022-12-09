@@ -11,11 +11,7 @@ const growdeverRoutes = Router();
 
 growdeverRoutes.get("/", [logGetMiddleware], new GrowdeverController().list);
 growdeverRoutes.get("/:id", new GrowdeverController().get);
-growdeverRoutes.post(
-    "/",
-    [createGrowdeverValidator, cpfExistsMiddleware],
-    new GrowdeverController().create
-);
+growdeverRoutes.post("/", [createGrowdeverValidator, cpfExistsMiddleware], new GrowdeverController().create);
 growdeverRoutes.delete("/:id", new GrowdeverController().delete);
 growdeverRoutes.put("/:id", new GrowdeverController().update);
 

@@ -1,3 +1,4 @@
+import { UpdateGrowdeverUseCase } from "./../usecases/update-growdever.usecase";
 import { CacheRepository } from "./../../../shared/repositories/cache.repository";
 import { Endereco } from "../../../models/endereco.model";
 import { growdeversList } from "../../../shared/data/growdeversList";
@@ -9,6 +10,7 @@ import { GrowdeverRepository } from "../repositories/growdever.repository";
 import { serverError, success } from "../../../shared/util/response.helper";
 import { ListGrowdeversUseCase } from "../usecases/list-growdevers.usecase";
 import { CreateGrowdeverUseCase } from "../usecases/create-growdever.usecase";
+import { GetGrowdeverUseCase } from "../usecases/get-growdevers.usecase";
 
 export class GrowdeverController {
     public async list(req: Request, res: Response) {
@@ -26,23 +28,15 @@ export class GrowdeverController {
         try {
             const { id } = req.params;
 
-            const repository = new GrowdeverRepository();
-            const result = await repository.get(id);
+            const usecase = new GetGrowdeverUseCase(new GrowdeverRepository(), new CacheRepository());
+            const result = await usecase.execute(id);
 
             if (!result) {
                 return res.status(404).send({
                     ok: false,
-                    message: "Deu ruim! O Growdever não existe",
+                    message: "Growdever not found",
                 });
             }
-
-            const growdever = Growdever.create(
-                result.nome,
-                result.idade,
-                result.cpf,
-                result.id,
-                result.skills?.split(",") ?? []
-            );
 
             return res.status(200).send({
                 ok: true,
@@ -79,25 +73,25 @@ export class GrowdeverController {
             const { id } = req.params;
             const { nome, idade } = req.body;
 
-            const repository = new GrowdeverRepository();
-            const result = await repository.get(id);
+            const usecase = new UpdateGrowdeverUseCase(new GrowdeverRepository());
 
-            if (!result) {
-                return res.status(404).send({
-                    ok: false,
-                    message: "Ng aruá!",
-                });
-            }
-
-            const resultUpdate = repository.update(result, {
+            const result = await usecase.execute({
+                id,
                 nome,
                 idade,
             });
 
+            if (result === null) {
+                return res.status(404).send({
+                    ok: false,
+                    message: "Growdever not found",
+                });
+            }
+
             return res.status(200).send({
                 ok: true,
                 message: "Growdever atualizado com sucesso",
-                data: resultUpdate,
+                data: result,
             });
         } catch (error: any) {
             return serverError(res, error);
