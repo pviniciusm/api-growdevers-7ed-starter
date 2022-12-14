@@ -88,8 +88,8 @@ export class AvaliacaoController {
                 growdeverResult.nome,
                 growdeverResult.idade,
                 growdeverResult.cpf,
-                growdeverResult.id,
-                growdeverResult.skills?.split(",")
+                growdeverResult.id
+                // growdeverResult.skills?.split(",")
             );
 
             // 2- criar uma avaliação (model)

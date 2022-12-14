@@ -4,15 +4,15 @@ import { CacheRepository } from "../../../shared/repositories/cache.repository";
 import { GrowdeverRepository } from "../repositories/growdever.repository";
 
 export class ListGrowdeversUseCase {
-    constructor(private repository: GrowdeverRepository, private cacheRepository: CacheRepository) {}
+    constructor(
+        private repository: GrowdeverRepository,
+        private cacheRepository: CacheRepository
+    ) {}
 
     public async execute() {
         const cachedList = await this.cacheRepository.get("growdevers");
         if (cachedList) {
-            return {
-                cache: true,
-                data: cachedList,
-            };
+            return cachedList;
         }
 
         const result = await this.repository.list();
