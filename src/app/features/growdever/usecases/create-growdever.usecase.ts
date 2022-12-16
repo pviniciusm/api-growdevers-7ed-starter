@@ -19,9 +19,18 @@ interface CreateEnderecoDTO {
 }
 
 export class CreateGrowdeverUseCase {
-    constructor(private repository: GrowdeverRepository, private cacheRepository: CacheRepository) {}
+    constructor(
+        private repository: GrowdeverRepository,
+        private cacheRepository: CacheRepository
+    ) {}
 
     public async execute(data: CreateGrowdeverDTO) {
+        const existentGrowdever = await this.repository.getByCpf(data.cpf);
+
+        if (existentGrowdever) {
+            return null;
+        }
+
         let endereco = undefined;
 
         if (data.endereco) {
@@ -33,7 +42,13 @@ export class CreateGrowdeverUseCase {
             );
         }
 
-        const growdever = new Growdever(data.nome, data.cpf, data.idade, data.skills, endereco);
+        const growdever = new Growdever(
+            data.nome,
+            data.cpf,
+            data.idade,
+            data.skills,
+            endereco
+        );
 
         const result = await this.repository.create(growdever);
 

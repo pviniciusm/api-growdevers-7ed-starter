@@ -28,6 +28,15 @@ export class Endereco {
         return this._uf;
     }
 
+    public toJson() {
+        return {
+            rua: this.rua,
+            cidade: this.cidade,
+            uf: this.uf,
+            complemento: this.complemento,
+        };
+    }
+
     public static create(
         id: number,
         rua: string,

@@ -55,6 +55,7 @@ export class Growdever {
             cpf: this._cpf,
             id: this._id,
             skills: this._skills,
+            endereco: this._endereco?.toJson(),
         };
     }
 

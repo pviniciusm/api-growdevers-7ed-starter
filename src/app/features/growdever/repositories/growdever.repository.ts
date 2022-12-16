@@ -10,7 +10,8 @@ interface UpdateGrowdeverDTO {
 }
 
 export class GrowdeverRepository {
-    private _repository = DatabaseConnection.connection.getRepository(GrowdeverEntity);
+    private _repository =
+        DatabaseConnection.connection.getRepository(GrowdeverEntity);
 
     public async list() {
         const result = await this._repository.find({
@@ -39,12 +40,31 @@ export class GrowdeverRepository {
             );
         }
 
-        return Growdever.create(item.nome, item.idade, item.cpf, item.id, item.skills?.split(","), endereco);
+        return Growdever.create(
+            item.nome,
+            item.idade,
+            item.cpf,
+            item.id,
+            item.skills?.split(","),
+            endereco
+        );
     }
 
     public async get(id: string) {
         const result = await this._repository.findOneBy({
             id,
+        });
+
+        if (!result) {
+            return null;
+        }
+
+        return this.mapEntityToModel(result);
+    }
+
+    public async getByCpf(cpf: number) {
+        const result = await this._repository.findOneBy({
+            cpf,
         });
 
         if (!result) {
