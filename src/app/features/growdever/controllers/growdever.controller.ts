@@ -15,7 +15,10 @@ import { GetGrowdeverUseCase } from "../usecases/get-growdevers.usecase";
 export class GrowdeverController {
     public async list(req: Request, res: Response) {
         try {
-            const usecase = new ListGrowdeversUseCase(new GrowdeverRepository(), new CacheRepository());
+            const usecase = new ListGrowdeversUseCase(
+                new GrowdeverRepository(),
+                new CacheRepository()
+            );
 
             const result = await usecase.execute();
             return success(res, result, "Growdevers successfully listed");
@@ -28,7 +31,10 @@ export class GrowdeverController {
         try {
             const { id } = req.params;
 
-            const usecase = new GetGrowdeverUseCase(new GrowdeverRepository(), new CacheRepository());
+            const usecase = new GetGrowdeverUseCase(
+                new GrowdeverRepository(),
+                new CacheRepository()
+            );
             const result = await usecase.execute(id);
 
             if (!result) {
@@ -52,7 +58,10 @@ export class GrowdeverController {
         try {
             const { nome, cpf, idade, skills, endereco } = req.body;
 
-            const usecase = new CreateGrowdeverUseCase(new GrowdeverRepository(), new CacheRepository());
+            const usecase = new CreateGrowdeverUseCase(
+                new GrowdeverRepository(),
+                new CacheRepository()
+            );
             const result = await usecase.execute({
                 nome,
                 cpf,
@@ -61,7 +70,7 @@ export class GrowdeverController {
                 endereco,
             });
 
-            return success(res, result, "Growdever successfully created");
+            return success(res, result, "Growdever successfully created", 201);
         } catch (error: any) {
             return serverError(res, error);
         }
@@ -72,7 +81,10 @@ export class GrowdeverController {
             const { id } = req.params;
             const { nome, idade } = req.body;
 
-            const usecase = new UpdateGrowdeverUseCase(new GrowdeverRepository(), new CacheRepository());
+            const usecase = new UpdateGrowdeverUseCase(
+                new GrowdeverRepository(),
+                new CacheRepository()
+            );
 
             const result = await usecase.execute({
                 id,
@@ -109,7 +121,9 @@ export class GrowdeverController {
                 return res.status(404).send("deu errado! :(");
             }
 
-            await dbConnection.query(`DELETE FROM public.growdever WHERE id = '${id}'`);
+            await dbConnection.query(
+                `DELETE FROM public.growdever WHERE id = '${id}'`
+            );
 
             return res.status(200).send({
                 ok: true,
