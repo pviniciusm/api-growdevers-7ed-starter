@@ -70,6 +70,13 @@ export class GrowdeverController {
                 endereco,
             });
 
+            if (!result) {
+                return res.status(400).send({
+                    ok: false,
+                    message: "growdever já existe",
+                });
+            }
+
             return success(res, result, "Growdever successfully created", 201);
         } catch (error: any) {
             return serverError(res, error);

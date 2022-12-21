@@ -23,10 +23,10 @@
         "test:unit:verbose": "jest -c ./jest.unit.config.ts --verbose --runInBand --detectOpenHandles",
         "test:unit:coverage": "jest -c ./jest.unit.config.ts --runInBand --coverage",
         "test:unit:watch": "jest -c ./jest.unit.config.ts --silent --noStackTrace --runInBand --watchAll",
-        "test:integration": "jest -c ./jest.integration.config.ts --silent --noStackTrace --runInBand",
-        "test:integration:verbose": "jest -c ./jest.integration.config.ts --verbose --runInBand --detectOpenHandles",
-        "test:integration:coverage": "jest -c ./jest.integration.config.ts --runInBand --coverage",
-        "test:integration:watch": "jest -c ./jest.integration.config.ts --silent --noStackTrace --runInBand --watchAll"
+        "test:integration": "cross-env NODE_ENV=test jest -c ./jest.integration.config.ts --silent --noStackTrace --runInBand",
+        "test:integration:verbose": "cross-env NODE_ENV=test jest -c ./jest.integration.config.ts --verbose --runInBand --detectOpenHandles",
+        "test:integration:coverage": "cross-env NODE_ENV=test jest -c ./jest.integration.config.ts --runInBand --coverage",
+        "test:integration:watch": "cross-env NODE_ENV=test jest -c ./jest.integration.config.ts --silent --noStackTrace --runInBand --watchAll"
     },
     "keywords": [],
     "author": "",

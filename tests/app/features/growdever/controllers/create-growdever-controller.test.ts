@@ -10,7 +10,7 @@ import { GrowdeverRepository } from "../../../../../src/app/features/growdever/r
 import { Endereco } from "../../../../../src/app/models/endereco.model";
 import { EnderecoEntity } from "../../../../../src/app/shared/entities/endereco.entity";
 
-describe("Get growdever by id - integration controller test", () => {
+describe("Create growdever - integration controller test", () => {
     beforeAll(async () => await openConnection());
     afterAll(async () => await closeConnection());
 
@@ -42,27 +42,4 @@ describe("Get growdever by id - integration controller test", () => {
 
         return growdever;
     };
-
-    test("deve retornar 404 se o growdever não existir", async () => {
-        const app = makeSut();
-
-        const result = await request(app).get("/growdever/abc").send();
-
-        expect(result).not.toBeNull();
-        expect(result.statusCode).toEqual(404);
-        expect(result).toHaveProperty("body.ok", false);
-    });
-
-    test("deve retornar 200 se o growdever existir", async () => {
-        const app = makeSut();
-        const growdever = await createGrowdever();
-
-        const result = await request(app)
-            .get(`/growdever/${growdever.id}`)
-            .send();
-
-        expect(result).not.toBeNull();
-        expect(result.statusCode).toEqual(200);
-        expect(result).toHaveProperty("body.ok", true);
-    });
 });
