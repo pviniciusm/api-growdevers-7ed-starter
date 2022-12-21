@@ -2,3 +2,5 @@ node_modules
 build
 .env
 coverage
+database.sqlite3
+tests/app/shared/migrations

@@ -2,16 +2,19 @@ import { CacheRepository } from "../../../shared/repositories/cache.repository";
 import { GrowdeverRepository } from "../repositories/growdever.repository";
 
 export class GetGrowdeverUseCase {
-    constructor(private repository: GrowdeverRepository, private cacheRepository: CacheRepository) {}
+    constructor(
+        private repository: GrowdeverRepository,
+        private cacheRepository: CacheRepository
+    ) {}
 
     public async execute(id: string) {
-        // 1 - Verificar se o growdever está em cache
-        const growdeverCache = await this.cacheRepository.get(`growdever-${id}`);
+        // // 1 - Verificar se o growdever está em cache
+        // const growdeverCache = await this.cacheRepository.get(`growdever-${id}`);
 
-        // 2 - Se estiver em cache, retornar o cache
-        if (growdeverCache) {
-            return growdeverCache;
-        }
+        // // 2 - Se estiver em cache, retornar o cache
+        // if (growdeverCache) {
+        //     return growdeverCache;
+        // }
 
         // 3 - se não, buscar o growdever do repositório primário
         const growdever = await this.repository.get(id);
