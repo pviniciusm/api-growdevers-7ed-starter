@@ -6,7 +6,7 @@ import { CacheRepository } from "../../../../../src/app/shared/repositories/cach
 import { Growdever } from "../../../../../src/app/models/growdever.model";
 import { Endereco } from "../../../../../src/app/models/endereco.model";
 
-describe("Create growdever usecase unit tests", () => {
+describe.skip("Create growdever usecase unit tests", () => {
     beforeAll(async () => {
         await DatabaseConnection.connect();
         await CacheConnection.connect();

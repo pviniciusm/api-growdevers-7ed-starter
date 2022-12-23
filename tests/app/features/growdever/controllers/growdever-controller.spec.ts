@@ -7,7 +7,7 @@ import request from "supertest";
 import { CreateGrowdeverUseCase } from "../../../../../src/app/features/growdever/usecases/create-growdever.usecase";
 import { Growdever } from "../../../../../src/app/models/growdever.model";
 
-describe("Growdever controller tests", () => {
+describe.skip("Growdever controller tests", () => {
     beforeAll(async () => await openConnection());
     afterAll(async () => await closeConnection());
 
