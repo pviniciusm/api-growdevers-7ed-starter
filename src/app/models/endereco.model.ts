@@ -28,6 +28,18 @@ export class Endereco {
         return this._uf;
     }
 
+    public set rua(rua: string) {
+        this._rua = rua;
+    }
+
+    public set cidade(cidade: string) {
+        this._cidade = cidade;
+    }
+
+    public set uf(uf: string) {
+        this._uf = uf;
+    }
+
     public toJson() {
         return {
             rua: this.rua,

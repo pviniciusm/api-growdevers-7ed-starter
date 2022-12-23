@@ -16,4 +16,8 @@ export class EnderecoRepository {
 
         return await this._repository.save(enderecoEntity);
     }
+
+    public async update(endereco: Endereco) {
+        return;
+    }
 }
